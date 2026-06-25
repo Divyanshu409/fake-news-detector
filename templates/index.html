@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fake News Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <div class="logo-mark">O</div>
+        Fake News Detector
+      </a>
+      <nav class="header-nav">
+        <a href="#analyze" class="nav-link">Analyze</a>
+        <a href="#metrics" class="nav-link" onclick="loadMetrics()">Metrics</a>
+        <a href="#how-it-works" class="nav-link">How it works</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="analyze">
+    <div class="hero-eyebrow">BY DIVYANSHU SHARMA</div>
+    <h1 class="hero-headline">
+      Can you trust<br/>
+      <span class="headline-accent">what you read?</span>
+    </h1>
+    <p class="hero-sub">
+      Paste a news article and Fake News Detector analyzes it with a fine-tuned transformer model to detect misinformation instantly.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">~98%</div>
+        <div class="hero-stat-label">Model accuracy</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">512</div>
+        <div class="hero-stat-label">Max tokens</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">real-time</div>
+        <div class="hero-stat-label">Inference speed</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main-panel">
+
+    <div class="card input-card">
+      <div class="card-header">
+        <span class="card-label">Article text</span>
+        <span id="charCount" class="char-count">0 characters</span>
+      </div>
+      <textarea
+        id="articleText"
+        class="article-textarea"
+        placeholder="Paste a full news article here — headline, body, any length. The model reads up to 512 tokens for its prediction..."
+        spellcheck="false"
+      ></textarea>
+      <div class="input-footer">
+        <span class="shortcut-hint">Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to analyze</span>
+        <button class="btn-analyze" onclick="analyzeArticle()">
+          Analyze
+          <span class="btn-arrow">-&gt;</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card error-card" id="errorCard">
+      <span class="error-icon">!</span>
+      <span id="errorMsg">Something went wrong.</span>
+    </div>
+
+    <div class="card result-card" id="resultCard">
+
+      <div class="verdict-banner" id="verdictBanner">
+        <div class="verdict-left">
+          <div class="verdict-chip" id="verdictChip">
+            <span class="dot"></span>
+            <span id="verdictLabel">-</span>
+          </div>
+          <div class="verdict-summary" id="verdictSummary"></div>
+        </div>
+        <div class="confidence-ring-wrap">
+          <svg class="confidence-ring" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="50"/>
+            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50"
+              stroke-dasharray="314" stroke-dashoffset="314"/>
+          </svg>
+          <div class="ring-text" id="ringText">0%</div>
+        </div>
+      </div>
+
+      <div class="prob-section">
+        <div class="prob-section-title">Probability breakdown</div>
+        <div class="prob-row">
+          <span class="prob-tag fake-tag">FAKE</span>
+          <div class="bar-track"><div class="bar-fill fake-fill" id="fakeBar"></div></div>
+          <span class="prob-val" id="fakePct">0%</span>
+        </div>
+        <div class="prob-row">
+          <span class="prob-tag real-tag">REAL</span>
+          <div class="bar-track"><div class="bar-fill real-fill" id="realBar"></div></div>
+          <span class="prob-val" id="realPct">0%</span>
+        </div>
+      </div>
+
+      <div class="result-bottom">
+        <div class="keywords-section">
+          <div class="section-label">Key signals detected</div>
+          <div class="keyword-chips" id="keywordChips"></div>
+        </div>
+        <div class="highlighted-section">
+          <div class="section-label">Article with highlighted signals</div>
+          <div class="highlighted-text" id="highlightedText"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <section class="metrics-section" id="metrics">
+    <div class="section-wrap">
+      <div class="section-eyebrow">Model performance</div>
+      <h2 class="section-title">Evaluation results</h2>
+      <p class="section-desc">Tested on a held-out split. Shows how often the model correctly classifies real and fake articles.</p>
+      <div class="metrics-grid">
+        <div class="card">
+          <div class="card-header"><span class="card-label">Confusion matrix</span></div>
+          <div id="cmDisplay" class="cm-placeholder">
+            <button class="btn-load-metrics" onclick="loadMetrics()">Load metrics</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-label">Performance stats</span></div>
+          <div id="statsDisplay" class="stats-placeholder">
+            <p class="placeholder-text">Click "Load metrics" to view</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-section" id="how-it-works">
+    <div class="section-wrap">
+      <div class="section-eyebrow">Under the hood</div>
+      <h2 class="section-title">How Fake News Detector works</h2>
+      <p class="section-desc">A four-stage pipeline from raw text to verdict.</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-title">Tokenization</div>
+          <p class="step-desc">Your article is split into subword tokens by DistilBERT's vocabulary — up to 512 at once.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-title">Transformer encoding</div>
+          <p class="step-desc">6 attention layers build deep contextual representations — word meaning relative to everything around it.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-title">Classification</div>
+          <p class="step-desc">A fine-tuned linear layer maps the [CLS] embedding to FAKE / REAL probabilities via softmax.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <div class="step-title">Signal extraction</div>
+          <p class="step-desc">High-frequency content words are surfaced, showing which terms most influenced the verdict.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-logo">Fake News Detector</span>
+      <span class="footer-note">Built with DistilBERT · Flask · Kaggle Fake News Dataset</span>
+    </div>
+  </footer>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-inner">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Analyzing article...</div>
+    </div>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

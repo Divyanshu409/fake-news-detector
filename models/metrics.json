@@ -1,0 +1,61 @@
+{
+  "accuracy": 99.98,
+  "confusion_matrix": [
+    [
+      2000,
+      0
+    ],
+    [
+      1,
+      1999
+    ]
+  ],
+  "labels": [
+    "FAKE",
+    "REAL"
+  ],
+  "classification_report": {
+    "FAKE": {
+      "precision": 0.9995002498750625,
+      "recall": 1.0,
+      "f1-score": 0.9997500624843789,
+      "support": 2000.0
+    },
+    "REAL": {
+      "precision": 1.0,
+      "recall": 0.9995,
+      "f1-score": 0.9997499374843711,
+      "support": 2000.0
+    },
+    "accuracy": 0.99975,
+    "macro avg": {
+      "precision": 0.9997501249375312,
+      "recall": 0.99975,
+      "f1-score": 0.9997499999843751,
+      "support": 4000.0
+    },
+    "weighted avg": {
+      "precision": 0.9997501249375311,
+      "recall": 0.99975,
+      "f1-score": 0.999749999984375,
+      "support": 4000.0
+    }
+  },
+  "training_history": [
+    {
+      "epoch": 1,
+      "loss": 0.06211571533850656,
+      "accuracy": 0.999
+    },
+    {
+      "epoch": 2,
+      "loss": 0.0026453296611089173,
+      "accuracy": 0.9995
+    },
+    {
+      "epoch": 3,
+      "loss": 0.0007298149614030081,
+      "accuracy": 0.99975
+    }
+  ]
+}
