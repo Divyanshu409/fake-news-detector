@@ -158,9 +158,8 @@ Uses the [Fake and Real News Dataset](https://www.kaggle.com/datasets/clmentbisa
 ## Author
 
 **Divyanshu Sharma**  
-Intern - InLighnx Global
 [GitHub](https://github.com/Divyanshu409)
-
+Intern - InLighnx Global
 ---
 
 ## License
