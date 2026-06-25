@@ -50,7 +50,7 @@ fake-news-detector/
 
 ### Confusion Matrix
 
-[Confusion Matrix](confusion_matrix/confusion_matrix.png)
+![Confusion Matrix](confusion%20matrix/confusion_matrix.png)
 
 |                | Predicted FAKE | Predicted REAL |
 |----------------|----------------|----------------|
